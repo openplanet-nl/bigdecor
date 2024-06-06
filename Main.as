@@ -40,7 +40,14 @@ void Main()
 
 void RenderMenu()
 {
-	bool canOpenAdvancedEditor = Permissions::OpenAdvancedMapEditor();
+	bool canOpenAdvancedEditor;
+#if NEXT
+	canOpenAdvancedEditor = Permissions::OpenAdvancedMapEditor();
+#elif MP4
+	canOpenAdvancedEditor = GetDemoManiaPlanet();
+#elif TURBO
+	canOpenAdvancedEditor = GetDemoTurbo();
+#endif
 	if (UI::MenuItem("\\$cf9" + Icons::Map + "\\$z Create a new map", "", g_createUI.m_visible, canOpenAdvancedEditor) && !g_createUI.m_visible) {
 		g_createUI.m_visible = !g_createUI.m_visible;
 	}
@@ -50,3 +57,19 @@ void RenderInterface()
 {
 	g_createUI.Render();
 }
+
+#if MP4
+bool GetDemoManiaPlanet()
+{
+	auto app = cast<CGameManiaPlanet>(GetApp());
+	return app.Stations.Length == 0;
+}
+#endif
+
+#if TURBO
+bool GetDemoTurbo()
+{
+	auto app = cast<CGameManiaPlanet>(GetApp());
+	return app.ManiaPlanetScriptAPI.TmTurbo_IsDemo;
+}
+#endif
