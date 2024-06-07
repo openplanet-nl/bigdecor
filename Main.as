@@ -62,7 +62,7 @@ void RenderInterface()
 bool GetDemoManiaPlanet()
 {
 	auto app = cast<CGameManiaPlanet>(GetApp());
-	return app.Stations.Length == 0;
+	return app.Stations.Length != 0;
 }
 #endif
 
@@ -70,6 +70,6 @@ bool GetDemoManiaPlanet()
 bool GetDemoTurbo()
 {
 	auto app = cast<CGameManiaPlanet>(GetApp());
-	return app.ManiaPlanetScriptAPI.TmTurbo_IsDemo;
+	return !app.ManiaPlanetScriptAPI.TmTurbo_IsDemo;
 }
 #endif
