@@ -40,7 +40,7 @@ void Main()
 
 void RenderMenu()
 {
-	bool canOpenAdvancedEditor;
+	bool canOpenAdvancedEditor = false;
 #if NEXT
 	canOpenAdvancedEditor = Permissions::OpenAdvancedMapEditor();
 #elif MP4
