@@ -90,9 +90,14 @@ namespace Window
 		UI::SeparatorTextOpenplanet("\\$fc9" + Icons::Cube + "\\$z Properties");
 
 		// Dimensions
-		Params::DecoSize.x = UI::SliderInt("Size X", Params::DecoSize.x, 1, 255, "%d", UI::SliderFlags::AlwaysClamp);
-		Params::DecoSize.y = UI::SliderInt("Size Y (height)", Params::DecoSize.y, 1, 255, "%d", UI::SliderFlags::AlwaysClamp);
-		Params::DecoSize.z = UI::SliderInt("Size Z", Params::DecoSize.z, 1, 255, "%d", UI::SliderFlags::AlwaysClamp);
+		int sliderFlags = 0;
+		if (!Setting_UnlimitDecoSize) {
+			sliderFlags |= UI::SliderFlags::AlwaysClamp;
+		}
+		Params::DecoSize.x = UI::SliderInt("Size X", Params::DecoSize.x, 1, 255, "%d", sliderFlags);
+		Params::DecoSize.y = UI::SliderInt("Size Y (height)", Params::DecoSize.y, 1, 255, "%d", sliderFlags);
+		Params::DecoSize.z = UI::SliderInt("Size Z", Params::DecoSize.z, 1, 255, "%d", sliderFlags);
+		UI::TextDisabled("Control-Click the sliders to type values.");
 
 		// Buttons
 		if (UI::Button(Icons::PlusCircle + " Create map")) {
