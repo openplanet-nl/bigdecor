@@ -11,4 +11,6 @@ class PreloadingFid
 	}
 
 	PreloadingFid(CSystemFidFile@ fid) { @Fid = fid; }
+
+	bool opEquals(const PreloadingFid &in other) { return Fid is other.Fid; }
 }

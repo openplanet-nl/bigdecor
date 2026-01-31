@@ -2,7 +2,7 @@ namespace Params
 {
 	//TODO: Change these to the actual nods instead of strings?
 
-	string Environment;
+	PreloadingFid@ Collection;
 	string PlayerModel;
 	PreloadingFid@ Decoration;
 	string TextureMod;
@@ -16,33 +16,40 @@ namespace Params
 			return;
 		}
 
-		SetEnvironment(cast<CGameCtnCollection>(Constants::Collections[0].Nod).CollectionId_Text, true);
+		SetCollection(Constants::Collections[0], true);
 		PlayerModel = Constants::PlayerModels[0];
 		TextureMod = "";
 		DecoSize = nat3(48, 40, 48);
 	}
 
-	void SetEnvironment(const string &in newEnvironment, bool forced = false)
+	void SetCollection(PreloadingFid@ newCollectionFid, bool forced = false)
 	{
-		// Do nothing if the environment remains the same
-		if (Environment == newEnvironment && !forced) {
+		// Do nothing if the collection remains the same
+		if (Collection !is null && Collection == newCollectionFid && !forced) {
 			return;
 		}
 
-		// Set environment
-		Environment = newEnvironment;
+		// Get the collection from the fid
+		auto newCollection = cast<CGameCtnCollection>(newCollectionFid.Nod);
+		if (newCollection is null) {
+			error("Fid is not a collection");
+			return;
+		}
+
+		// Set collection
+		@Collection = newCollectionFid;
 
 		// Update list of decorations and clear set default decoration
-		Constants::LoadDecorationsForCollection(newEnvironment);
+		Constants::LoadDecorationsForCollection(newCollection);
 		if (Constants::Decorations.Length > 0) {
 			SetDecoration(Constants::Decorations[0]);
 		} else {
-			error("No moods found for enviromnent '" + newEnvironment + "'!");
+			error("No moods found for enviromnent '" + newCollection.CollectionId_Text + "'!");
 			@Decoration = null;
 		}
 
 		// Update list of texture mods and clear out current texture mod
-		Constants::LoadTextureModsForEnvironment(newEnvironment);
+		Constants::LoadTextureModsForCollection(newCollection);
 		TextureMod = "";
 	}
 
@@ -63,6 +70,9 @@ namespace Params
 			return;
 		}
 
+		auto collection = cast<CGameCtnCollection>(Collection.Nod);
+		auto collectionId = collection.CollectionId_Text;
+
 		auto deco = cast<CGameCtnDecoration>(Decoration.Nod);
 
 		if (g_decorSize !is null) {
@@ -80,17 +90,17 @@ namespace Params
 
 		string textureModPath = "";
 		if (TextureMod != "") {
-			textureModPath = "Skins/" + Environment + "/Mod/" + TextureMod;
+			textureModPath = "Skins/" + collectionId + "/Mod/" + TextureMod;
 		}
 
 		print("Starting editor");
-		trace("- \"" + Environment + "\"");
+		trace("- \"" + collectionId + "\"");
 		trace("- \"" + deco.IdName + "\"");
 		trace("- \"" + textureModPath + "\"");
 		trace("- \"" + PlayerModel + "\"");
 
 		app.ManiaTitleControlScriptAPI.EditNewMap2(
-			Environment, // "Stadium"
+			collectionId, // "Stadium"
 			deco.IdName, // "Base48x48Day"
 			textureModPath, // "Skins/Stadium/Mod/MyMod.zip"
 			PlayerModel, // "CarSport"

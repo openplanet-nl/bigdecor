@@ -26,15 +26,15 @@ namespace Window
 		UI::SeparatorTextOpenplanet("\\$cf9" + Icons::Tree + "\\$z Environment");
 
 		// Environment
-		if (UI::BeginCombo("Environment", GetNameForEnvironment(Params::Environment))) {
+		if (UI::BeginCombo("Environment", GetNameForCollection(Params::Collection))) {
 			for (uint i = 0; i < Constants::Collections.Length; i++) {
-				auto collection = cast<CGameCtnCollection>(Constants::Collections[i].Nod);
-				string environment = collection.CollectionId_Text;
-				if (!Setting_ShowStadium256 && environment == "Stadium256") {
+				auto collectionFid = Constants::Collections[i];
+				auto collection = cast<CGameCtnCollection>(collectionFid.Nod);
+				if (!Setting_ShowStadium256 && collection.CollectionId_Text == "Stadium256") {
 					continue;
 				}
-				if (UI::Selectable(GetNameForEnvironment(environment), environment == Params::Environment)) {
-					Params::SetEnvironment(environment);
+				if (UI::Selectable(GetNameForCollection(collection), collectionFid == Params::Collection)) {
+					Params::SetCollection(collectionFid);
 				}
 			}
 
@@ -96,20 +96,27 @@ namespace Window
 		//todo: randomize button
 	}
 
-	string GetNameForEnvironment(const string &in environment)
+	string GetNameForCollection(PreloadingFid@ collectionFid)
 	{
-		if (environment == "Stadium") {
+		auto collection = cast<CGameCtnCollection>(collectionFid.Nod);
+		return GetNameForCollection(collection);
+	}
+
+	string GetNameForCollection(CGameCtnCollection@ collection)
+	{
+		auto collectionId = collection.CollectionId_Text;
+		if (collectionId == "Stadium") {
 			return "\\$fd3" + Icons::Flag + "\\$z Stadium";
-		} else if (environment == "GreenCoast") {
+		} else if (collectionId == "GreenCoast") {
 			return "\\$493" + Icons::Flag + "\\$z Green Coast";
-		} else if (environment == "RedIsland") {
+		} else if (collectionId == "RedIsland") {
 			return "\\$d21" + Icons::Flag + "\\$z Red Island";
-		} else if (environment == "BlueBay") {
+		} else if (collectionId == "BlueBay") {
 			return "\\$36d" + Icons::Flag + "\\$z Blue Bay";
-		} else if (environment == "WhiteShore") {
+		} else if (collectionId == "WhiteShore") {
 			return "\\$5de" + Icons::Flag + "\\$z White Shore";
 		}
-		return environment;
+		return collectionId;
 	}
 
 	string GetNameForPlayerModel(const string &in playerModel)

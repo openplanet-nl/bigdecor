@@ -20,18 +20,6 @@ namespace Constants
 		}
 	}
 
-	CGameCtnCollection@ FindCollection(const string &in id)
-	{
-		for (uint i = 0; i < Collections.Length; i++) {
-			auto collectionFid = Collections[i];
-			auto collection = cast<CGameCtnCollection>(collectionFid.Nod);
-			if (collection.CollectionId_Text == id) {
-				return collection;
-			}
-		}
-		return null;
-	}
-
 	array<string> PlayerModels = {
 		"CarSport",
 		"CarSnow",
@@ -42,18 +30,12 @@ namespace Constants
 
 	array<PreloadingFid@> Decorations;
 
-	void LoadDecorationsForCollection(const string &in id)
+	void LoadDecorationsForCollection(CGameCtnCollection@ collection)
 	{
 		Decorations.RemoveRange(0, Decorations.Length);
 
-		auto collection = FindCollection(id);
-		if (collection is null) {
-			error("Collection with id '" + id + "' could not be found");
-			return;
-		}
-
 		if (collection.FolderDecoration is null) {
-			error("Decoration folder for collection with id '" + id + "' is null");
+			error("Decoration folder for collection '" + collection.CollectionId_Text + "' is null");
 			return;
 		}
 
@@ -72,11 +54,12 @@ namespace Constants
 
 	array<string> TextureMods;
 
-	void LoadTextureModsForEnvironment(const string &in environment)
+	void LoadTextureModsForCollection(CGameCtnCollection@ collection)
 	{
 		TextureMods.RemoveRange(0, TextureMods.Length);
 
-		string path = "Skins/" + environment + "/Mod";
+		string path = "Skins/" + collection.CollectionId_Text + "/Mod";
+
 		LoadTextureModsInFolder(Fids::GetUserFolder(path));
 
 		auto folderTitles = Fids::GetFakeFolder("Titles");
