@@ -8,7 +8,7 @@ namespace Params
 
 	void Initialize()
 	{
-		GameData::LoadCollections();
+		GameData::Initialize();
 		if (GameData::Collections.Length == 0) {
 			error("No environments found!");
 			return;
@@ -17,7 +17,6 @@ namespace Params
 		SetCollection(GameData::Collections[0], true);
 		PlayerModel = GameData::PlayerModels[0];
 		TextureMod = "";
-		DecoSize = nat3(48, 40, 48);
 	}
 
 	void SetCollection(PreloadingFid@ newCollectionFid, bool forced = false)
@@ -42,7 +41,7 @@ namespace Params
 		if (GameData::Decorations.Length > 0) {
 			SetDecoration(GameData::Decorations[0]);
 		} else {
-			error("No moods found for enviromnent '" + newCollection.CollectionId_Text + "'!");
+			error("No moods found for enviromnent '" + GameData::GetCollectionId(newCollection) + "'!");
 			@Decoration = null;
 		}
 
@@ -69,7 +68,7 @@ namespace Params
 		}
 
 		auto collection = cast<CGameCtnCollection>(Collection.Nod);
-		auto collectionId = collection.CollectionId_Text;
+		auto collectionId = GameData::GetCollectionId(collection);
 
 		auto deco = cast<CGameCtnDecoration>(Decoration.Nod);
 

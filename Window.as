@@ -17,9 +17,17 @@ namespace Window
 
 	void RenderContents()
 	{
+		auto app = cast<CTrackMania>(GetApp());
+
+		// Require users to be in a title
+		if (app.LoadedManiaTitle is null) {
+			UI::Text("You must be in a titlepack to create a new map.");
+			return;
+		}
+
 		// Require users to not be in a map
-		if (GetApp().RootMap !is null) {
-			UI::Text("Return to the main meun to create a new map.");
+		if (app.RootMap !is null) {
+			UI::Text("Return to the main menu to create a new map.");
 			return;
 		}
 
@@ -32,7 +40,7 @@ namespace Window
 			for (uint i = 0; i < GameData::Collections.Length; i++) {
 				auto collectionFid = GameData::Collections[i];
 				auto collection = cast<CGameCtnCollection>(collectionFid.Nod);
-				if (!Setting_ShowStadium256 && collection.CollectionId_Text == "Stadium256") {
+				if (!Setting_ShowStadium256 && GameData::GetCollectionId(collection) == "Stadium256") {
 					continue;
 				}
 				if (UI::Selectable(GetNameForCollection(collection), collectionFid == Params::Collection)) {
@@ -114,7 +122,8 @@ namespace Window
 
 	string GetNameForCollection(CGameCtnCollection@ collection)
 	{
-		auto collectionId = collection.CollectionId_Text;
+		auto collectionId = GameData::GetCollectionId(collection);
+#if TMNEXT
 		if (collectionId == "Stadium") {
 			return "\\$fd3" + Icons::Flag + "\\$z Stadium";
 		} else if (collectionId == "GreenCoast") {
@@ -126,11 +135,23 @@ namespace Window
 		} else if (collectionId == "WhiteShore") {
 			return "\\$5de" + Icons::Flag + "\\$z White Shore";
 		}
+#else
+		if (collectionId == "Stadium") {
+			return "\\$fd3" + Icons::Flag + "\\$z Stadium";
+		} else if (collectionId == "Valley") {
+			return "\\$493" + Icons::Flag + "\\$z Valley";
+		} else if (collectionId == "Canyon") {
+			return "\\$d21" + Icons::Flag + "\\$z Canyon";
+		} else if (collectionId == "Lagoon") {
+			return "\\$36d" + Icons::Flag + "\\$z Lagoon";
+		}
+#endif
 		return collectionId;
 	}
 
 	string GetNameForPlayerModel(const string &in playerModel)
 	{
+#if TMNEXT
 		if (playerModel == "CarSport") {
 			return "Stadium Car";
 		} else if (playerModel == "CarSnow") {
@@ -142,6 +163,17 @@ namespace Window
 		} else if (playerModel == "CharacterPilot") {
 			return "Pilot Character";
 		}
+#else
+		if (playerModel == "CanyonCar") {
+			return "Canyon Car";
+		} else if (playerModel == "StadiumCar") {
+			return "Stadium Car";
+		} else if (playerModel == "ValleyCar") {
+			return "Valley Car";
+		} else if (playerModel == "LagoonCar") {
+			return "Lagoon Car";
+		}
+#endif
 		return playerModel;
 	}
 }

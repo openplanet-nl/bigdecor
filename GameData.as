@@ -1,30 +1,54 @@
 namespace GameData
 {
-	array<PreloadingFid@> Collections;
+	string GetCollectionId(CGameCtnCollection@ collection)
+	{
+#if TMNEXT
+		return collection.CollectionId_Text;
+#elif MP4
+		return collection.DisplayName;
+#else
+		error("GetCollectionId not implemented for this game!");
+		return "unknown";
+#endif
+	}
 
-	void LoadCollections()
+	array<PreloadingFid@> Collections;
+	array<string> PlayerModels;
+
+	void Initialize()
 	{
 		Collections.RemoveRange(0, Collections.Length);
+		PlayerModels.RemoveRange(0, PlayerModels.Length);
 
 		auto title = cast<CTrackMania>(GetApp()).LoadedManiaTitle;
+		if (title is null) {
+			return;
+		}
+
+#if TMNEXT
+		PlayerModels = {
+			"CarSport",
+			"CarSnow",
+			"CarRally",
+			"CarDesert",
+			"CharacterPilot",
+		};
+#endif
+
 		for (uint i = 0; i < title.CollectionFids.Length; i++) {
 			auto fid = cast<CSystemFidFile>(title.CollectionFids[i]);
 			if (fid.Nod is null) {
 				Fids::Preload(fid);
 			}
-			if (cast<CGameCtnCollection>(fid.Nod) !is null) {
+			auto collection = cast<CGameCtnCollection>(fid.Nod);
+			if (collection !is null) {
 				Collections.InsertLast(fid);
+#if !TMNEXT
+				PlayerModels.InsertLast(collection.VehicleName.GetName());
+#endif
 			}
 		}
 	}
-
-	array<string> PlayerModels = {
-		"CarSport",
-		"CarSnow",
-		"CarRally",
-		"CarDesert",
-		"CharacterPilot",
-	};
 
 	array<PreloadingFid@> Decorations;
 
@@ -33,7 +57,7 @@ namespace GameData
 		Decorations.RemoveRange(0, Decorations.Length);
 
 		if (collection.FolderDecoration is null) {
-			error("Decoration folder for collection '" + collection.CollectionId_Text + "' is null");
+			error("Decoration folder for collection '" + GetCollectionId(collection) + "' is null");
 			return;
 		}
 
@@ -56,7 +80,7 @@ namespace GameData
 	{
 		TextureMods.RemoveRange(0, TextureMods.Length);
 
-		string path = "Skins/" + collection.CollectionId_Text + "/Mod";
+		string path = "Skins/" + GetCollectionId(collection) + "/Mod";
 
 		LoadTextureModsInFolder(Fids::GetUserFolder(path));
 

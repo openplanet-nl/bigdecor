@@ -50,7 +50,11 @@ void Main()
 
 void RenderMenu()
 {
+#if TMNEXT
 	bool canOpenAdvancedEditor = Permissions::OpenAdvancedMapEditor();
+#else
+	bool canOpenAdvancedEditor = true;
+#endif
 	if (UI::MenuItem("\\$cf9" + Icons::Map + "\\$z Create a new map", "", Window::Visible, canOpenAdvancedEditor)) {
 		Window::Visible = !Window::Visible;
 	}
