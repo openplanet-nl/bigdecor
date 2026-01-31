@@ -95,7 +95,7 @@ namespace Params
 #if TURBO
 		app.ManiaTitleFlowScriptAPI.EditNewMap(
 			collectionId, // "Stadium"
-			deco.IdName,
+			deco.IdName, // "Day"
 			textureModPath, // "Skins/Stadium/Mod/MyMod.zip"
 			PlayerModel, // "StadiumCar"
 			"RaceCE.Script.txt", "", ""
