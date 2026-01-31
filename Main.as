@@ -1,7 +1,12 @@
 CGameCtnDecorationSize@ g_decorSize = null;
 nat3 g_originalSize;
 
-CreateUI g_createUI;
+void OnTitleChange(CGameManiaTitle@ title)
+{
+	if (Window::Visible) {
+		//Window::OnTitleChange(title);
+	}
+}
 
 void OnEditorOpen()
 {
@@ -19,12 +24,20 @@ void OnEditorClose()
 
 void Main()
 {
+	//TODO: Remove before release; it's just for UI::IsWindowAppearing() to return true on plugin reload
+	 yield();
+	 Window::Visible = true;
+
 	auto app = cast<CGameManiaPlanet>(GetApp());
 
 	bool inMapEditor = false;
+	CGameManiaTitle@ inTitle;
 
 	while (true) {
-		g_createUI.Update();
+		if (app.LoadedManiaTitle !is inTitle) {
+			@inTitle = app.LoadedManiaTitle;
+			OnTitleChange(inTitle);
+		}
 		yield();
 
 		auto editor = cast<CGameCtnEditorFree>(app.Editor);
@@ -41,12 +54,14 @@ void Main()
 void RenderMenu()
 {
 	bool canOpenAdvancedEditor = Permissions::OpenAdvancedMapEditor();
-	if (UI::MenuItem("\\$cf9" + Icons::Map + "\\$z Create a new map", "", g_createUI.m_visible, canOpenAdvancedEditor) && !g_createUI.m_visible) {
-		g_createUI.m_visible = !g_createUI.m_visible;
+	if (UI::MenuItem("\\$cf9" + Icons::Map + "\\$z Create a new map", "", Window::Visible, canOpenAdvancedEditor)) {
+		Window::Visible = !Window::Visible;
 	}
 }
 
 void RenderInterface()
 {
-	g_createUI.Render();
+	if (Window::Visible) {
+		Window::Render();
+	}
 }
