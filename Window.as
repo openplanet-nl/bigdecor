@@ -99,7 +99,6 @@ namespace Window
 			Params::EditNewMap();
 			Visible = false;
 		}
-		//todo: randomize button
 	}
 
 	string GetNameForCollection(PreloadingFid@ collectionFid)
