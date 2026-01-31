@@ -1,10 +1,10 @@
 CGameCtnDecorationSize@ g_decorSize = null;
 nat3 g_originalSize;
 
-void OnTitleChange(CGameManiaTitle@ title)
+void OnTitleChange()
 {
 	if (Window::Visible) {
-		//Window::OnTitleChange(title);
+		Params::Initialize();
 	}
 }
 
@@ -32,7 +32,7 @@ void Main()
 	while (true) {
 		if (app.LoadedManiaTitle !is inTitle) {
 			@inTitle = app.LoadedManiaTitle;
-			OnTitleChange(inTitle);
+			OnTitleChange();
 		}
 		yield();
 
