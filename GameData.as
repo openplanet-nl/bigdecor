@@ -1,6 +1,4 @@
-//TODO: rename to GameData or something?
-
-namespace Constants
+namespace GameData
 {
 	array<PreloadingFid@> Collections;
 

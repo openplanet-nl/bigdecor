@@ -1,23 +1,21 @@
 namespace Params
 {
-	//TODO: Change these to the actual nods instead of strings?
-
 	PreloadingFid@ Collection;
-	string PlayerModel;
 	PreloadingFid@ Decoration;
+	string PlayerModel;
 	string TextureMod;
 	nat3 DecoSize;
 
 	void Initialize()
 	{
-		Constants::LoadCollections();
-		if (Constants::Collections.Length == 0) {
+		GameData::LoadCollections();
+		if (GameData::Collections.Length == 0) {
 			error("No environments found!");
 			return;
 		}
 
-		SetCollection(Constants::Collections[0], true);
-		PlayerModel = Constants::PlayerModels[0];
+		SetCollection(GameData::Collections[0], true);
+		PlayerModel = GameData::PlayerModels[0];
 		TextureMod = "";
 		DecoSize = nat3(48, 40, 48);
 	}
@@ -40,16 +38,16 @@ namespace Params
 		@Collection = newCollectionFid;
 
 		// Update list of decorations and clear set default decoration
-		Constants::LoadDecorationsForCollection(newCollection);
-		if (Constants::Decorations.Length > 0) {
-			SetDecoration(Constants::Decorations[0]);
+		GameData::LoadDecorationsForCollection(newCollection);
+		if (GameData::Decorations.Length > 0) {
+			SetDecoration(GameData::Decorations[0]);
 		} else {
 			error("No moods found for enviromnent '" + newCollection.CollectionId_Text + "'!");
 			@Decoration = null;
 		}
 
 		// Update list of texture mods and clear out current texture mod
-		Constants::LoadTextureModsForCollection(newCollection);
+		GameData::LoadTextureModsForCollection(newCollection);
 		TextureMod = "";
 	}
 

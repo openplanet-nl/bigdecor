@@ -29,8 +29,8 @@ namespace Window
 		UI::PushID("Collection");
 		Params::Collection.RenderDebug();
 		if (UI::BeginCombo("Collection", GetNameForCollection(Params::Collection))) {
-			for (uint i = 0; i < Constants::Collections.Length; i++) {
-				auto collectionFid = Constants::Collections[i];
+			for (uint i = 0; i < GameData::Collections.Length; i++) {
+				auto collectionFid = GameData::Collections[i];
 				auto collection = cast<CGameCtnCollection>(collectionFid.Nod);
 				if (!Setting_ShowStadium256 && collection.CollectionId_Text == "Stadium256") {
 					continue;
@@ -49,8 +49,8 @@ namespace Window
 		Params::Decoration.RenderDebug();
 		auto currentDeco = cast<CGameCtnDecoration>(Params::Decoration.Nod);
 		if (UI::BeginCombo("Decoration", currentDeco.IdName)) {
-			for (uint i = 0; i < Constants::Decorations.Length; i++) {
-				auto pfid = Constants::Decorations[i];
+			for (uint i = 0; i < GameData::Decorations.Length; i++) {
+				auto pfid = GameData::Decorations[i];
 				auto deco = cast<CGameCtnDecoration>(pfid.Nod);
 				if (UI::Selectable(deco.IdName, currentDeco.IdName == deco.IdName)) {
 					Params::SetDecoration(pfid);
@@ -62,8 +62,8 @@ namespace Window
 
 		// Player model
 		if (UI::BeginCombo("Player model", GetNameForPlayerModel(Params::PlayerModel))) {
-			for (uint i = 0; i < Constants::PlayerModels.Length; i++) {
-				string playerModel = Constants::PlayerModels[i];
+			for (uint i = 0; i < GameData::PlayerModels.Length; i++) {
+				string playerModel = GameData::PlayerModels[i];
 				if (UI::Selectable(GetNameForPlayerModel(playerModel), playerModel == Params::PlayerModel)) {
 					Params::PlayerModel = playerModel;
 				}
@@ -72,13 +72,13 @@ namespace Window
 		}
 
 		// User mod
-		if (Constants::TextureMods.Length > 0) {
+		if (GameData::TextureMods.Length > 0) {
 			if (UI::BeginCombo("Texture mod", Params::TextureMod == "" ? "\\$666(none)" : Params::TextureMod)) {
 				if (UI::Selectable("\\$666(none)", Params::TextureMod == "")) {
 					Params::TextureMod = "";
 				}
-				for (uint i = 0; i < Constants::TextureMods.Length; i++) {
-					string mod = Constants::TextureMods[i];
+				for (uint i = 0; i < GameData::TextureMods.Length; i++) {
+					string mod = GameData::TextureMods[i];
 					if (UI::Selectable(mod, mod == Params::TextureMod)) {
 						Params::TextureMod = mod;
 					}
