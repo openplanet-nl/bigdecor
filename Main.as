@@ -30,11 +30,12 @@ void Main()
 	CGameManiaTitle@ inTitle;
 
 	while (true) {
+		yield();
+
 		if (app.LoadedManiaTitle !is inTitle) {
 			@inTitle = app.LoadedManiaTitle;
 			OnTitleChange();
 		}
-		yield();
 
 		auto editor = cast<CGameCtnEditorFree>(app.Editor);
 		if (!inMapEditor && editor !is null) {
