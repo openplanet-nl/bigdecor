@@ -24,10 +24,6 @@ void OnEditorClose()
 
 void Main()
 {
-	//TODO: Remove before release; it's just for UI::IsWindowAppearing() to return true on plugin reload
-	 yield();
-	 Window::Visible = true;
-
 	auto app = cast<CGameManiaPlanet>(GetApp());
 
 	bool inMapEditor = false;
