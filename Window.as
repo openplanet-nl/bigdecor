@@ -25,8 +25,10 @@ namespace Window
 
 		UI::SeparatorTextOpenplanet("\\$cf9" + Icons::Tree + "\\$z Environment");
 
-		// Environment
-		if (UI::BeginCombo("Environment", GetNameForCollection(Params::Collection))) {
+		// Collection
+		UI::PushID("Collection");
+		Params::Collection.RenderDebug();
+		if (UI::BeginCombo("Collection", GetNameForCollection(Params::Collection))) {
 			for (uint i = 0; i < Constants::Collections.Length; i++) {
 				auto collectionFid = Constants::Collections[i];
 				auto collection = cast<CGameCtnCollection>(collectionFid.Nod);
@@ -40,19 +42,11 @@ namespace Window
 
 			UI::EndCombo();
 		}
-
-		// Player model
-		if (UI::BeginCombo("Player model", GetNameForPlayerModel(Params::PlayerModel))) {
-			for (uint i = 0; i < Constants::PlayerModels.Length; i++) {
-				string playerModel = Constants::PlayerModels[i];
-				if (UI::Selectable(GetNameForPlayerModel(playerModel), playerModel == Params::PlayerModel)) {
-					Params::PlayerModel = playerModel;
-				}
-			}
-			UI::EndCombo();
-		}
+		UI::PopID();
 
 		// Decoration
+		UI::PushID("Decoration");
+		Params::Decoration.RenderDebug();
 		auto currentDeco = cast<CGameCtnDecoration>(Params::Decoration.Nod);
 		if (UI::BeginCombo("Decoration", currentDeco.IdName)) {
 			for (uint i = 0; i < Constants::Decorations.Length; i++) {
@@ -60,6 +54,18 @@ namespace Window
 				auto deco = cast<CGameCtnDecoration>(pfid.Nod);
 				if (UI::Selectable(deco.IdName, currentDeco.IdName == deco.IdName)) {
 					Params::SetDecoration(pfid);
+				}
+			}
+			UI::EndCombo();
+		}
+		UI::PopID();
+
+		// Player model
+		if (UI::BeginCombo("Player model", GetNameForPlayerModel(Params::PlayerModel))) {
+			for (uint i = 0; i < Constants::PlayerModels.Length; i++) {
+				string playerModel = Constants::PlayerModels[i];
+				if (UI::Selectable(GetNameForPlayerModel(playerModel), playerModel == Params::PlayerModel)) {
+					Params::PlayerModel = playerModel;
 				}
 			}
 			UI::EndCombo();
