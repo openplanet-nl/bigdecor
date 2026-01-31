@@ -66,3 +66,17 @@ void RenderInterface()
 		Window::Render();
 	}
 }
+
+#if TURBO
+namespace Fids
+{
+	CMwNod@ Preload(CSystemFid@ fid)
+	{
+		auto fidFile = cast<CSystemFidFile>(fid);
+		if (fidFile !is null) {
+			return Fids::Preload(fidFile);
+		}
+		return null;
+	}
+}
+#endif

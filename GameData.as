@@ -4,10 +4,10 @@ namespace GameData
 	{
 #if TMNEXT
 		return collection.CollectionId_Text;
-#elif MP4
-		return collection.DisplayName;
+#elif MP4 || TURBO
+		return collection.DisplayName; //todo: can we do this on Next too?
 #else
-		error("GetCollectionId not implemented for this game!");
+		throw("GetCollectionId not implemented for this game!");
 		return "unknown";
 #endif
 	}
@@ -99,7 +99,7 @@ namespace GameData
 		}
 		Fids::UpdateTree(folder);
 		for (uint i = 0; i < folder.Leaves.Length; i++) {
-			auto fidMod = folder.Leaves[i];
+			auto fidMod = cast<CSystemFidFile>(folder.Leaves[i]);
 			TextureMods.InsertLast(fidMod.FileName);
 		}
 	}

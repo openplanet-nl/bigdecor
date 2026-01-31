@@ -11,6 +11,9 @@ class PreloadingFid
 	}
 
 	PreloadingFid(CSystemFidFile@ fid) { @Fid = fid; }
+#if TURBO
+	PreloadingFid(CSystemFid@ fid) { @Fid = cast<CSystemFidFile>(fid); }
+#endif
 
 	void RenderDebug()
 	{

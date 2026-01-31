@@ -26,7 +26,11 @@ namespace Window
 		}
 
 		// Require users to not be in a map
+#if TURBO
+		if (app.Challenge !is null) {
+#else
 		if (app.RootMap !is null) {
+#endif
 			UI::Text("Return to the main menu to create a new map.");
 			return;
 		}

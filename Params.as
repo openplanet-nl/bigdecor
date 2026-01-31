@@ -62,11 +62,6 @@ namespace Params
 
 	void EditNewMap()
 	{
-		CTrackMania@ app = cast<CTrackMania>(GetApp());
-		if (app.ManiaTitleControlScriptAPI is null) {
-			return;
-		}
-
 		auto collection = cast<CGameCtnCollection>(Collection.Nod);
 		auto collectionId = GameData::GetCollectionId(collection);
 
@@ -96,6 +91,16 @@ namespace Params
 		trace("- \"" + textureModPath + "\"");
 		trace("- \"" + PlayerModel + "\"");
 
+		CTrackMania@ app = cast<CTrackMania>(GetApp());
+#if TURBO
+		app.ManiaTitleFlowScriptAPI.EditNewMap(
+			collectionId, // "Stadium"
+			deco.IdName,
+			textureModPath, // "Skins/Stadium/Mod/MyMod.zip"
+			PlayerModel, // "StadiumCar"
+			"RaceCE.Script.txt", "", ""
+		);
+#else
 		app.ManiaTitleControlScriptAPI.EditNewMap2(
 			collectionId, // "Stadium"
 			deco.IdName, // "Base48x48Day"
@@ -103,5 +108,6 @@ namespace Params
 			PlayerModel, // "CarSport"
 			"", false, "", ""
 		);
+#endif
 	}
 }
