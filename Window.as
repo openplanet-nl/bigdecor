@@ -35,6 +35,12 @@ namespace Window
 			return;
 		}
 
+		// Make sure we actually have some data
+		if (GameData::Collections.Length == 0) {
+			UI::Text("No collections available.");
+			return;
+		}
+
 		UI::SeparatorTextOpenplanet("\\$cf9" + Icons::Tree + "\\$z Environment");
 
 		// Collection
