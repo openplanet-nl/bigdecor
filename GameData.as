@@ -100,7 +100,9 @@ namespace GameData
 		Fids::UpdateTree(folder);
 		for (uint i = 0; i < folder.Leaves.Length; i++) {
 			auto fidMod = cast<CSystemFidFile>(folder.Leaves[i]);
-			TextureMods.InsertLast(fidMod.FileName);
+			if (fidMod.FileName.EndsWith(".zip")) {
+				TextureMods.InsertLast(fidMod.FileName);
+			}
 		}
 	}
 }
