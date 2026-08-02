@@ -14,10 +14,25 @@ void OnEditorOpen()
 
 void OnEditorClose()
 {
+	RestoreDecoSize();
+}
+
+void RestoreDecoSize()
+{
 	if (g_decorSize !is null) {
+#if TMNEXT || MP41
 		g_decorSize.SizeX = g_originalSize.x;
 		g_decorSize.SizeY = g_originalSize.y;
 		g_decorSize.SizeZ = g_originalSize.z;
+#else
+		g_decorSize.SizeX = int(g_originalSize.x);
+		g_decorSize.SizeY = int(g_originalSize.y);
+		g_decorSize.SizeZ = int(g_originalSize.z);
+#endif
+
+#if !TMNEXT
+		g_decorSize.MwRelease();
+#endif
 		@g_decorSize = null;
 	}
 }

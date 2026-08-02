@@ -67,10 +67,12 @@ namespace Params
 
 		auto deco = cast<CGameCtnDecoration>(Decoration.Nod);
 
-		if (g_decorSize !is null) {
-			error("Decor size is expected to be null, but it's not");
-		}
+		RestoreDecoSize();
+
 		@g_decorSize = deco.DecoSize;
+#if !TMNEXT
+		g_decorSize.MwAddRef();
+#endif
 
 		g_originalSize.x = g_decorSize.SizeX;
 		g_originalSize.y = g_decorSize.SizeY;
